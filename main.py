@@ -17,9 +17,9 @@ def print_board(board):
 
 
 def check_winner(board, player):
-    """Checks the board each turn to check its status by looping through rows.
-    Uses range of 3 to indentify a line of either X's or O's on the grid as per the game rules.
-    Will return False if none of these conditions are met on each turn."""
+    """Checks the board each turn for a winner by iterating through rows.
+    Uses range of 3 to indentify players markers in either a single row, column or diagonal.
+    Will return True if a player wins. Will return False if none of these conditions are met."""
     for row in board:
         if all(cell == player for cell in row):
             return True
@@ -37,12 +37,12 @@ def is_full(board):
 
 def tic_tac_toe():
     """Function to the run the game.
-    Calls the board for play and initialises a list of two players for X and O.
+    Initialises the board 3x3 for play and a list of two players for X and O.
     Allows players to type an input of a grid coordinate to enter their marker on a turn.
-    Runs a wile loop to check the status of the game and initialises a turn counter.
-    map function iterates through the list of turns
-    Calls the check_winner() function each turn to check if a range of 3 X's or O's exist.
-    is_full function() called on each turn to check the status of the game, a draw will be declared if no spaces exist.
+    Runs a while loop to check the status of the game and initialises a turn counter.
+    Map function parses player input from string to integer.
+    Check_winner() function determines if the current player has won.
+    Is_full function() called on each turn to check the status of the game, a draw will be declared if no spaces exist.
     """
     board = [[" " for _ in range(3)] for _ in range(3)]
     players = ["X", "O"]
