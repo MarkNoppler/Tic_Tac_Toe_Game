@@ -18,7 +18,7 @@ def print_board(board):
 
 def check_winner(board, player):
     """Checks the board each turn for a winner by iterating through rows.
-    Uses range of 3 to indentify players markers in either a single row, column or diagonal.
+    Uses range of 3 (0-2) to indentify players markers in either a single row, column or diagonal.
     Will return True if a player wins. Will return False if none of these conditions are met."""
     for row in board:
         if all(cell == player for cell in row):
@@ -44,7 +44,7 @@ def tic_tac_toe():
     Check_winner() function determines if the current player has won.
     Is_full function() called on each turn to check the status of the game, a draw will be declared if no spaces exist.
     """
-    board = [[" " for _ in range(3)] for _ in range(3)]
+    board = [[" " for i in range(3)] for i in range(3)]
     players = ["X", "O"]
     turn = 0
 
