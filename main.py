@@ -15,9 +15,11 @@ Made by Jacob Fairhurst
 #imports
 import pygame
 import sys
+from typing import Optional
 
+pygame.init()
 
-#Constants
+#Constants. Square size = 600/3, circle radius square / 3
 WIDTH, HEIGHT = 600, 600
 LINE_WIDTH = 15
 BOARD_ROWS, BOARD_COLS = 3, 3
@@ -32,6 +34,8 @@ BLACK = (0, 0, 0)
 LINE_COLOR = (23, 145, 135)
 CIRCLE_COLOR = (239, 231, 200)
 CROSS_COLOR = (66, 66, 66)
+FONT = pygame.font.Font(None, 36)
+
 
 class TicTacToe:
     """
@@ -41,17 +45,16 @@ class TicTacToe:
         """
         Initialise the game and display.
         """
-        pygame.init()
+        #pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption("Tic-Tac-Toe")
+        pygame.display.set_caption("Tic-Tac-Toe: (Use R key to restart.)")
         self.screen.fill(WHITE)
         self.board = [[None] * BOARD_COLS for _ in range(BOARD_ROWS)]
         self.current_player = "X"
         self.draw_grid()
         self.running = True
 
-
-    def draw_grid(self):
+    def draw_grid(self) -> None:
         """
         Draws the grid on screen iterating through rows.
         """
@@ -61,10 +64,9 @@ class TicTacToe:
             pygame.draw.line(self.screen, LINE_COLOR, (col * SQUARE_SIZE, 0), (col * SQUARE_SIZE, HEIGHT), LINE_WIDTH)
         pygame.display.update()
 
-
-    def mark_square(self, row, col):
+    def mark_square(self, row: int, col: int) -> bool:
         """
-        Marks a square with the corresponding players symbol
+        Marks a square with the corresponding player's symbol.
 
         :param row: Each row cell on the grid
         :param col: Each column cell on the grid
@@ -77,8 +79,7 @@ class TicTacToe:
             return True
         return False
 
-
-    def draw_figures(self):
+    def draw_figures(self) -> None:
         """
         Draws the players X or O on the screen
         """
@@ -95,11 +96,10 @@ class TicTacToe:
                     pygame.draw.line(self.screen, CROSS_COLOR, start_asc, end_asc, CROSS_WIDTH)
         pygame.display.update()
 
-
-    def check_winner(self):
+    def check_winner(self) -> Optional[str]:
         """
         Checks for a winner comparing cells in a line across columns, rows or diagonally
-        :return: None type if no winner is found. Return the line if winner found
+        :return: None if no winner is found. Returns the winning player's symbol ("X" or "O") if a winner is found.
         """
         for row in range(BOARD_ROWS):
             if self.board[row][0] == self.board[row][1] == self.board[row][2] and self.board[row][0] is not None:
@@ -113,10 +113,27 @@ class TicTacToe:
             return self.board[0][2]
         return None
 
-
-    def restart(self):
+    def display_winner(self, winner: str) -> None:
         """
-        Restarts the game by clearing the board and going back to the first players turn.
+        Display a winner message to the user
+        :param winner: The winner (either 'X' or 'O')
+        :return: None
+        """
+        message = f"{winner} Wins! --- (Press the R key to play again.)"
+        text = FONT.render(message, True, (0, 0, 0))
+        text_rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+        self.screen.fill((255, 255, 255))
+        self.screen.blit(text, text_rect)
+        pygame.display.update()
+
+    def restart(self) -> None:
+        """
+        Restarts the game by clearing the board and going back to the first player's turn.
+
+        This method resets the game board, sets the current player to "X", and re-enables
+        the game to be played again by setting the `running` flag to True.
+
+        :return: None
         """
         self.screen.fill(WHITE)
         self.draw_grid()
@@ -124,8 +141,7 @@ class TicTacToe:
         self.current_player = "X"
         self.running = True
 
-
-    def mainloop(self):
+    def mainloop(self) -> None:
         """
         Logic for the game main loop to update the game state and handle cursor inputs
         """
@@ -141,6 +157,8 @@ class TicTacToe:
                         self.draw_figures()
                         winner = self.check_winner()
                         if winner:
+                            pygame.time.wait(1500)
+                            self.display_winner(winner)
                             print(f"{winner} wins!")
                             self.running = False
                 if event.type == pygame.KEYDOWN:
